@@ -1,44 +1,63 @@
 #!/usr/bin/python3
-"""This module defines a base class for all models in our hbnb clone"""
+"""
+This is an abstraction class to be inherited by other classes of the project
+"""
+from . import storage
 import uuid
 from datetime import datetime
 
 
 class BaseModel:
-    """A base class for all hbnb models"""
+    """
+    Defines all common attributes/methods for other classes
+    """
+
     def __init__(self, *args, **kwargs):
-        """Instatntiates a new model"""
-        if not kwargs:
-            from models import storage
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-            storage.new(self)
+        """Initialization"""
+        if len(kwargs) != 0:
+            forbidden_keys = ['__class__']
+            datetime_keys = ['created_at', 'updated_at']
+            is_new = False
+            if 'id' not in kwargs:
+                kwargs['id'] = str(uuid.uuid4())
+                is_new = True
+            now = kwargs['created_at'] = datetime.now().isoformat()
+            if 'created_at' not in kwargs:
+                kwargs['created_at'] = now
+            if 'updated_at' not in kwargs:
+                kwargs['updated_at'] = now
+            for k, v in kwargs.items():
+                if k in forbidden_keys:
+                    continue
+                if k in datetime_keys:
+                    # convert to datetime object
+                    v = datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+                setattr(self, k, v)
+            if is_new:
+                storage.new(self)
+
         else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            del kwargs['__class__']
-            self.__dict__.update(kwargs)
+            self.id = str(uuid.uuid4())
+            now = datetime.now()
+            self.created_at = now
+            self.updated_at = now
+            storage.new(self)
 
     def __str__(self):
-        """Returns a string representation of the instance"""
-        cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+        """Returns the string representation of an instance"""
+        return "[{}] ({}) {}".format(self.__class__.__name__,
+                                     self.id, self.__dict__)
 
     def save(self):
-        """Updates updated_at with current time when instance is changed"""
-        from models import storage
+        """updates the public instance attribute updated_
+        at with the current datetime"""
         self.updated_at = datetime.now()
         storage.save()
 
     def to_dict(self):
-        """Convert instance into dict format"""
-        dictionary = {}
-        dictionary.update(self.__dict__)
-        dictionary.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
-        dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
-        return dictionary
+        """Returns a dictionary representation of an object"""
+        res = self.__dict__.copy()
+        res['__class__'] = self.__class__.__name__
+        res['created_at'] = self.created_at.isoformat()
+        res['updated_at'] = self.updated_at.isoformat()
+        return res
