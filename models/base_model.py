@@ -52,6 +52,10 @@ class BaseModel:
         """Returns the string representation of an instance"""
         forbidden = ['_sa_instance_state']
         d = {k: v for k, v in self.__dict__.items() if k not in forbidden}
+        if 'password' in d:
+            pwd = d['password']
+            d['password'] = (hashlib.md5(pwd.encode('utf-8')).
+                             hexdigest().lower())
         return "[{}] ({}) {}".format(self.__class__.__name__, self.id, d)
 
     def save(self):
