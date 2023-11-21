@@ -48,8 +48,9 @@ class BaseModel:
 
     def __str__(self):
         """Returns the string representation of an instance"""
-        return "[{}] ({}) {}".format(self.__class__.__name__,
-                                     self.id, self.__dict__)
+        forbidden = ['_sa_instance_state']
+        d = {k: v for k, v in self.__dict__.items() if k not in forbidden}
+        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, d)
 
     def save(self):
         """updates the public instance attribute updated_

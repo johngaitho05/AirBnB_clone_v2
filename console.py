@@ -248,7 +248,8 @@ class HBNBCommand(cmd.Cmd):
         klas = arg[0]
         if klas not in self.__classes:
             return print("** class doesn't exist **")
-        instances = [str(instance) for k, instance in storage.all(self.__classes[klas]).items()]
+        instances = [str(instance) for k, instance in
+                     storage.all(self.__classes[klas]).items()]
         print(instances)
 
     def help_all(self):
