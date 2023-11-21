@@ -165,7 +165,6 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[klas](**kwargs)
-        new_instance.save()
         print(new_instance.id)
         storage.save()
 
