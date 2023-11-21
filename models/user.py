@@ -3,8 +3,8 @@
 from sqlalchemy import Column, String
 
 from models.base_model import BaseModel
+from models.engine.db_storage import Base
 from . import storage_type
-from .engine.db_storage import Base
 
 if storage_type == 'db':
     class User(BaseModel, Base):
