@@ -37,3 +37,6 @@ else:
         last_name = ""
         password = ""
 
+
+User.defaults = {'email': "", 'first_name': "",
+                 'last_name': "", 'password': ""}
