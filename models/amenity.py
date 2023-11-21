@@ -24,7 +24,3 @@ else:
         Represent an amenity.
         """
         name = ""
-
-Amenity.defaults = {
-    'name': ""
-}
