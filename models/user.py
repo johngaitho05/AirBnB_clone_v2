@@ -10,7 +10,7 @@ from . import storage_type
 if storage_type == 'db':
     class User(BaseModel, Base):
         """
-        User ORM
+        Represents a User ORM
         """
         __tablename__ = 'users'
         email = Column(String(128), nullable=False)
