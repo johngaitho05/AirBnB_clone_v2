@@ -73,10 +73,6 @@ class BaseModel:
         res['updated_at'] = self.updated_at.isoformat()
         if '_sa_instance_state' in res:
             del res['_sa_instance_state']
-        if 'password' in res:
-            pwd = res['password']
-            res['password'] = (hashlib.md5(pwd.encode('utf-8')).
-                               hexdigest().lower())
         return res
 
     def delete(self):

@@ -21,8 +21,6 @@ if storage_type == 'db':
                               cascade="all, delete-orphan")
         reviews = relationship("Review", backref="user",
                                cascade="all, delete-orphan")
-
-
 else:
     class User(BaseModel):
         """Represent a User.
