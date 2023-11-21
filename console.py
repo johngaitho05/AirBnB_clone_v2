@@ -18,7 +18,7 @@ class HBNBCommand(cmd.Cmd):
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
-    classes = {
+    __classes = {
         'BaseModel': BaseModel, 'User': User, 'Place': Place,
         'State': State, 'City': City, 'Amenity': Amenity,
         'Review': Review
@@ -161,12 +161,12 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         klas, kwargs = self._split(args)
-        if klas not in HBNBCommand.classes:
+        if klas not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[klas](**kwargs)
+        new_instance = HBNBCommand.__classes[klas](**kwargs)
         print(new_instance.id)
-        storage.save()
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -187,7 +187,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if c_name not in HBNBCommand.classes:
+        if c_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
 
@@ -218,7 +218,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if c_name not in HBNBCommand.classes:
+        if c_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
 
@@ -239,36 +239,30 @@ class HBNBCommand(cmd.Cmd):
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
 
-    def do_all(self, args):
-        """ Shows all objects, or all objects of a class"""
-        print_list = []
-
-        if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
-        else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+    def do_all(self, arg):
+        """prints all instances of a given model"""
+        arg = self._split(arg)
+        if not arg:
+            return print([str(instance) for k, instance in
+                          storage.all().items()])
+        klas = arg[0]
+        if klas not in self.__classes:
+            return print("** class doesn't exist **")
+        instances = [str(instance) for k, instance in storage.all(self.__classes[klas]).items()]
+        print(instances)
 
     def help_all(self):
         """ Help information for the all command """
         print("Shows all objects, or all of a class")
         print("[Usage]: all <className>\n")
 
-    def do_count(self, args):
-        """Count current number of class instances"""
-        count = 0
-        for k, v in storage._FileStorage__objects.items():
-            if args == k.split('.')[0]:
-                count += 1
-        print(count)
+    def do_count(self, arg):
+        """Count instances based on className"""
+        args = self._split(arg)
+        klas = args[0]
+        match = list(filter(lambda k: k.startswith('{}.'.format(klas)),
+                            storage.all().keys()))
+        print(len(match))
 
     def help_count(self):
         """ """
@@ -285,7 +279,7 @@ class HBNBCommand(cmd.Cmd):
         else:  # class name not present
             print("** class name missing **")
             return
-        if c_name not in HBNBCommand.classes:  # class name invalid
+        if c_name not in HBNBCommand.__classes:  # class name invalid
             print("** class doesn't exist **")
             return
 
