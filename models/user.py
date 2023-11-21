@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """Defines the User class."""
+from sqlalchemy import Column, String
+
 from models.base_model import BaseModel
 from . import storage_type
 from .engine.db_storage import Base
-from sqlalchemy import Column, String, ForeignKey
 
 if storage_type == 'db':
     class User(BaseModel, Base):
