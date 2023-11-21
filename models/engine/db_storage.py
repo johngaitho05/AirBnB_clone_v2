@@ -36,7 +36,7 @@ class DBStorage:
         from models.amenity import Amenity
         from models.place import Place
         from models.review import Review
-        classes = [State, City, User, Place]
+        classes = [State, City, User, Place, Review, Amenity]
         if cls:
             res = self.__session.query(cls).all()
         else:

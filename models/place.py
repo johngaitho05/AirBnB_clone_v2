@@ -1,14 +1,25 @@
 #!/usr/bin/python3
 """Defines the Place class."""
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
 from models.engine.db_storage import Base
 from . import storage_type, storage
+from .amenity import Amenity
 from .review import Review
 
 if storage_type == 'db':
+    place_amenity = Table('place_amenity', Base.metadata,
+                          Column('place_id', String(60),
+                                 ForeignKey('places.id'),
+                                 nullable=False),
+                          Column('amenity_id', String(60),
+                                 ForeignKey('amenities.id'),
+                                 nullable=False)
+                          )
+
+
     class Place(BaseModel, Base):
         """
         Place ORM
@@ -26,6 +37,8 @@ if storage_type == 'db':
         longitude = Column(Float, nullable=True)
         reviews = relationship("Review", backref="place",
                                cascade="all, delete-orphan")
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 viewonly=False)
 
 else:
     class Place(BaseModel):
@@ -61,3 +74,14 @@ else:
         def reviews(self):
             all_reviews = list(storage.all(Review).values())
             return list(filter((lambda c: c.place_id == self.id), all_reviews))
+
+        @property
+        def amenities(self):
+            all_amenities = list(storage.all(Amenity).values())
+            return list(filter((lambda a: a.id in self.amenity_ids),
+                               all_amenities))
+
+        @amenities.setter
+        def amenities(self, value):
+            if isinstance(value, Amenity):
+                self.amenity_ids.append(Amenity.id)
