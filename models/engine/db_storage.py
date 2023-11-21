@@ -27,7 +27,7 @@ class DBStorage:
                                              database),
                                       pool_pre_ping=True)
         if env == 'test':
-            Base.metadata.delete_all(self.__engine)
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         from models.user import User
@@ -36,7 +36,7 @@ class DBStorage:
         from models.amenity import Amenity
         from models.place import Place
         from models.review import Review
-        classes = [State, City, User]
+        classes = [State, City, User, Place]
         if cls:
             res = self.__session.query(cls).all()
         else:
@@ -63,7 +63,7 @@ class DBStorage:
         from models.amenity import Amenity
         from models.place import Place
         from models.review import Review
-
+        Base.metadata.drop_all(self.__engine)
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)

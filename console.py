@@ -182,11 +182,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.__classes[klas](**kwargs)
-        try:
-            new_instance.save()
-            print(new_instance.id)
-        except IntegrityError:
-            pass
+        new_instance.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """

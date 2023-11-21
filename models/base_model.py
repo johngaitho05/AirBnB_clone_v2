@@ -35,10 +35,6 @@ class BaseModel:
                 kwargs['created_at'] = now
             if 'updated_at' not in kwargs:
                 kwargs['updated_at'] = now
-            if 'password' in kwargs:
-                pwd = kwargs['password']
-                kwargs['password'] = (hashlib.md5(pwd.encode('utf-8'))
-                                      .hexdigest().lower())
             for k, v in kwargs.items():
                 if k in forbidden_keys:
                     continue
