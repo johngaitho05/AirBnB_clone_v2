@@ -75,6 +75,8 @@ class BaseModel:
         res['__class__'] = self.__class__.__name__
         res['created_at'] = self.created_at.isoformat()
         res['updated_at'] = self.updated_at.isoformat()
+        if '_sa_instance_state' in res:
+            del res['_sa_instance_state']
         return res
 
     def delete(self):
