@@ -3,20 +3,17 @@
 Contains the TestCityDocs classes
 """
 
+from datetime import datetime
 import inspect
-import unittest
-
-import pep8
-
-from models import city as g_city
+from models import city
 from models.base_model import BaseModel
-
-City = g_city.City
+import pep8
+import unittest
+City = city.City
 
 
 class TestCityDocs(unittest.TestCase):
     """Tests to check the documentation and style of City class"""
-
     @classmethod
     def setUpClass(cls):
         """Set up for the doc tests"""
@@ -24,7 +21,7 @@ class TestCityDocs(unittest.TestCase):
 
     def test_pep8_conformance_city(self):
         """Test that models/city.py conforms to PEP8."""
-        pep8s = pep8.StyleGuide(quiet=False)
+        pep8s = pep8.StyleGuide(quiet=True)
         result = pep8s.check_files(['models/city.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
@@ -38,9 +35,9 @@ class TestCityDocs(unittest.TestCase):
 
     def test_city_module_docstring(self):
         """Test for the city.py module docstring"""
-        self.assertIsNot(g_city.__doc__, None,
+        self.assertIsNot(city.__doc__, None,
                          "city.py needs a docstring")
-        self.assertTrue(len(g_city.__doc__) >= 1,
+        self.assertTrue(len(city.__doc__) >= 1,
                         "city.py needs a docstring")
 
     def test_city_class_docstring(self):
@@ -61,7 +58,6 @@ class TestCityDocs(unittest.TestCase):
 
 class TestCity(unittest.TestCase):
     """Test the City class"""
-
     def test_is_subclass(self):
         """Test that City is a subclass of BaseModel"""
         city = City()
@@ -107,7 +103,3 @@ class TestCity(unittest.TestCase):
         city = City()
         string = "[City] ({}) {}".format(city.id, city.__dict__)
         self.assertEqual(string, str(city))
-
-
-if __name__ == '__main__':
-    unittest.main()

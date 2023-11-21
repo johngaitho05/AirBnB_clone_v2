@@ -16,6 +16,8 @@ class BaseModel:
     Defines all common attributes/methods for other classes
     """
 
+    defaults = {}
+
     if storage_type == 'db':
         id = Column(String(60), primary_key=True, nullable=False, unique=True)
         created_at = Column(DateTime, default=datetime.utcnow(),
@@ -25,6 +27,9 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Initialization"""
+        for k, v in self.__class__.defaults.items():
+            if k not in kwargs:
+                kwargs.update({k: v})
         if kwargs:
             forbidden_keys = ['__class__']
             datetime_keys = ['created_at', 'updated_at']
@@ -35,6 +40,8 @@ class BaseModel:
                 kwargs['created_at'] = now
             if 'updated_at' not in kwargs:
                 kwargs['updated_at'] = now
+            if '_sa_instance_state' in kwargs:
+                del kwargs['_sa_instance_state']
             for k, v in kwargs.items():
                 if k in forbidden_keys:
                     continue
@@ -50,9 +57,10 @@ class BaseModel:
 
     def __str__(self):
         """Returns the string representation of an instance"""
-        forbidden = ['_sa_instance_state']
-        d = {k: v for k, v in self.__dict__.items() if k not in forbidden}
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, d)
+        # forbidden = ['_sa_instance_state']
+        # d = {k: v for k, v in self.__dict__.items() if k not in forbidden}
+        return "[{}] ({}) {}".format(self.__class__.__name__, self.id,
+                                     self.__dict__)
 
     def save(self):
         """updates the public instance attribute updated_
@@ -67,8 +75,6 @@ class BaseModel:
         res['__class__'] = self.__class__.__name__
         res['created_at'] = self.created_at.isoformat()
         res['updated_at'] = self.updated_at.isoformat()
-        if '_sa_instance_state' in res:
-            del res['_sa_instance_state']
         return res
 
     def delete(self):

@@ -3,15 +3,13 @@
 Contains the TestStateDocs classes
 """
 
+from datetime import datetime
 import inspect
-import unittest
-
-import pep8
-
-from models import state as g_state
+from models import state
 from models.base_model import BaseModel
-
-State = g_state.State
+import pep8
+import unittest
+State = state.State
 
 
 class TestStateDocs(unittest.TestCase):
@@ -37,9 +35,9 @@ class TestStateDocs(unittest.TestCase):
 
     def test_state_module_docstring(self):
         """Test for the state.py module docstring"""
-        self.assertIsNot(g_state.__doc__, None,
+        self.assertIsNot(state.__doc__, None,
                          "state.py needs a docstring")
-        self.assertTrue(len(g_state.__doc__) >= 1,
+        self.assertTrue(len(state.__doc__) >= 1,
                         "state.py needs a docstring")
 
     def test_state_class_docstring(self):
@@ -99,7 +97,3 @@ class TestState(unittest.TestCase):
         state = State()
         string = "[State] ({}) {}".format(state.id, state.__dict__)
         self.assertEqual(string, str(state))
-
-
-if __name__ == '__main__':
-    unittest.main()

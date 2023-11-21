@@ -9,7 +9,6 @@ from models.base_model import BaseModel
 from models.engine.db_storage import Base
 from . import storage_type
 
-
 if storage_type == 'db':
     class City(BaseModel, Base):
         """
@@ -17,7 +16,8 @@ if storage_type == 'db':
         """
         __tablename__ = "cities"
         name = Column(String(128), nullable=False)
-        state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
+        state_id = Column(String(60), ForeignKey('states.id'),
+                          nullable=False, )
         places = relationship("Place", backref="cities",
                               cascade="all, delete-orphan")
 else:
@@ -26,5 +26,10 @@ else:
         A blueprint for a City object
         """
 
-        state_id = ""
-        name = ""
+        places = ""
+
+
+City.defaults = {
+        'state_id': "",
+        'name': "",
+    }

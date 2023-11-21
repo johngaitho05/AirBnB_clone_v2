@@ -13,6 +13,8 @@ if storage_type == 'db':
         """
         State ORM
         """
+        defaults = {'name': ""}
+
         __tablename__ = 'states'
         name = Column(String(128), nullable=False)
         cities = relationship("City", backref="state",
@@ -24,7 +26,7 @@ else:
         name (str): The name of the state.
         """
 
-        name = ""
+        defaults = {'name': ""}
 
         @property
         def cities(self):

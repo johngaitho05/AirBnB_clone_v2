@@ -11,6 +11,8 @@ if storage_type == 'db':
         """
         Review ORM
         """
+        defaults = {'place_id': "", 'user_id': "", 'text': ""}
+
         __tablename__ = 'reviews'
 
         place_id = Column(String(60), ForeignKey('places.id'), nullable=False)
@@ -26,6 +28,4 @@ else:
             text (str): The text of the review.
         """
 
-        place_id = ""
-        user_id = ""
-        text = ""
+        defaults = {'place_id': "", 'user_id': "", 'text': ""}

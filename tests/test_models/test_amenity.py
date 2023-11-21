@@ -3,20 +3,17 @@
 Contains the TestAmenityDocs classes
 """
 
+from datetime import datetime
 import inspect
-import unittest
-
-import pep8
-
-from models import amenity as g_amenity
+from models import amenity
 from models.base_model import BaseModel
-
-Amenity = g_amenity.Amenity
+import pep8
+import unittest
+Amenity = amenity.Amenity
 
 
 class TestAmenityDocs(unittest.TestCase):
     """Tests to check the documentation and style of Amenity class"""
-
     @classmethod
     def setUpClass(cls):
         """Set up for the doc tests"""
@@ -38,9 +35,9 @@ class TestAmenityDocs(unittest.TestCase):
 
     def test_amenity_module_docstring(self):
         """Test for the amenity.py module docstring"""
-        self.assertIsNot(g_amenity.__doc__, None,
+        self.assertIsNot(amenity.__doc__, None,
                          "amenity.py needs a docstring")
-        self.assertTrue(len(g_amenity.__doc__) >= 1,
+        self.assertTrue(len(amenity.__doc__) >= 1,
                         "amenity.py needs a docstring")
 
     def test_amenity_class_docstring(self):
@@ -61,7 +58,6 @@ class TestAmenityDocs(unittest.TestCase):
 
 class TestAmenity(unittest.TestCase):
     """Test the Amenity class"""
-
     def test_is_subclass(self):
         """Test that Amenity is a subclass of BaseModel"""
         amenity = Amenity()
@@ -101,7 +97,3 @@ class TestAmenity(unittest.TestCase):
         amenity = Amenity()
         string = "[Amenity] ({}) {}".format(amenity.id, amenity.__dict__)
         self.assertEqual(string, str(amenity))
-
-
-if __name__ == '__main__':
-    unittest.main()

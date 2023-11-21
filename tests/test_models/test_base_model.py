@@ -7,6 +7,7 @@ import pep8 as pycodestyle
 import time
 import unittest
 from unittest import mock
+
 BaseModel = models.base_model.BaseModel
 module_doc = models.base_model.__doc__
 
@@ -15,9 +16,9 @@ class TestBaseModelDocs(unittest.TestCase):
     """Tests to check the documentation and style of BaseModel class"""
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(self):
         """Set up for docstring tests"""
-        cls.base_funcs = inspect.getmembers(BaseModel, inspect.isfunction)
+        self.base_funcs = inspect.getmembers(BaseModel, inspect.isfunction)
 
     def test_pep8_conformance(self):
         """Test that models/base_model.py conforms to PEP8."""
@@ -58,6 +59,7 @@ class TestBaseModelDocs(unittest.TestCase):
 
 class TestBaseModel(unittest.TestCase):
     """Test the BaseModel class"""
+
     @mock.patch('models.storage')
     def test_instantiation(self, mock_storage):
         """Test that object is correctly created"""
@@ -76,7 +78,6 @@ class TestBaseModel(unittest.TestCase):
             with self.subTest(attr=attr, typ=typ):
                 self.assertIn(attr, inst.__dict__)
                 self.assertIs(type(inst.__dict__[attr]), typ)
-        # self.assertTrue(mock_storage.new.called)
         self.assertEqual(inst.name, "Holberton")
         self.assertEqual(inst.number, 89)
 
@@ -146,7 +147,9 @@ class TestBaseModel(unittest.TestCase):
         string = "[BaseModel] ({}) {}".format(inst.id, inst.__dict__)
         self.assertEqual(string, str(inst))
 
-    def test_save(self):
+    @unittest.skipIf(models.storage_type == 'db', 'not support by filestorage')
+    @mock.patch('models.storage')
+    def test_save(self, mock_storage):
         """Test that save method updates `updated_at` and calls
         `storage.save`"""
         inst = BaseModel()
@@ -157,6 +160,3 @@ class TestBaseModel(unittest.TestCase):
         new_updated_at = inst.updated_at
         self.assertNotEqual(old_updated_at, new_updated_at)
         self.assertEqual(old_created_at, new_created_at)
-
-if __name__ == '__main__':
-    unittest.main()

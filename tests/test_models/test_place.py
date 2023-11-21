@@ -3,20 +3,17 @@
 Contains the TestPlaceDocs classes
 """
 
+from datetime import datetime
 import inspect
-import unittest
-
-import pep8
-
-from models import place as g_place
+from models import place, storage_type
 from models.base_model import BaseModel
-
-Place = g_place.Place
+import pep8
+import unittest
+Place = place.Place
 
 
 class TestPlaceDocs(unittest.TestCase):
     """Tests to check the documentation and style of Place class"""
-
     @classmethod
     def setUpClass(cls):
         """Set up for the doc tests"""
@@ -24,7 +21,7 @@ class TestPlaceDocs(unittest.TestCase):
 
     def test_pep8_conformance_place(self):
         """Test that models/place.py conforms to PEP8."""
-        pep8s = pep8.StyleGuide(quiet=False)
+        pep8s = pep8.StyleGuide(quiet=True)
         result = pep8s.check_files(['models/place.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
@@ -38,9 +35,9 @@ class TestPlaceDocs(unittest.TestCase):
 
     def test_place_module_docstring(self):
         """Test for the place.py module docstring"""
-        self.assertIsNot(g_place.__doc__, None,
+        self.assertIsNot(place.__doc__, None,
                          "place.py needs a docstring")
-        self.assertTrue(len(g_place.__doc__) >= 1,
+        self.assertTrue(len(place.__doc__) >= 1,
                         "place.py needs a docstring")
 
     def test_place_class_docstring(self):
@@ -61,7 +58,6 @@ class TestPlaceDocs(unittest.TestCase):
 
 class TestPlace(unittest.TestCase):
     """Test the Place class"""
-
     def test_is_subclass(self):
         """Test that Place is a subclass of BaseModel"""
         place = Place()
@@ -129,7 +125,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(type(place.latitude), float)
         self.assertEqual(place.latitude, 0.0)
 
-    def test_latitude_attr_1(self):
+    def test_latitude_attr(self):
         """Test Place has attr longitude, and it's a float == 0.0"""
         place = Place()
         self.assertTrue(hasattr(place, "longitude"))
@@ -168,7 +164,3 @@ class TestPlace(unittest.TestCase):
         place = Place()
         string = "[Place] ({}) {}".format(place.id, place.__dict__)
         self.assertEqual(string, str(place))
-
-
-if __name__ == '__main__':
-    unittest.main()

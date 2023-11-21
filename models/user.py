@@ -12,6 +12,10 @@ if storage_type == 'db':
         """
         Represents a User ORM
         """
+
+        defaults = {'email': "", 'first_name': "", 'last_name': "",
+                    'password': ""}
+
         __tablename__ = 'users'
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
@@ -32,7 +36,5 @@ else:
             last_name (str): The last name of the user.
         """
 
-        email = ""
-        password = ""
-        first_name = ""
-        last_name = ""
+        defaults = {'email': "", 'first_name': "", 'last_name': "",
+                    'password': ""}
