@@ -8,17 +8,23 @@ from models.engine.db_storage import Base
 from models.base_model import BaseModel
 from .city import City
 
-
-class State(BaseModel, Base):
-    """
-    State ORM
-    """
-    __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
-    if storage_type == 'db':
+if storage_type == 'db':
+    class State(BaseModel, Base):
+        """
+        State ORM
+        """
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
         cities = relationship("City", backref="state",
                               cascade="all, delete-orphan")
-    else:
+
+else:
+    class State(BaseModel):
+        """Attributes:
+        name (str): The name of the state.
+        """
+
+        name = ""
 
         @property
         def cities(self):
