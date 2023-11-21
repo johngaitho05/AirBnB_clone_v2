@@ -17,7 +17,7 @@ class FileStorage:
     def all(self, cls=None):
         """Returns the dictionary __objects."""
         if cls:
-            key = '{}.'.format(cls.__class__.__name__)
+            key = '{}.'.format(cls.__name__)
             return {k: v for k, v in self.__objects.items() if
                     k.startswith(key)}
         return self.__objects

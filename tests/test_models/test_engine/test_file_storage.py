@@ -84,7 +84,8 @@ class TestFileStorage(unittest.TestCase):
             with self.subTest(key=key, value=value):
                 instance = value()
                 storage.new(instance)
-                self.assertIn(instance, storage.all(instance).values())
+                self.assertIn(instance,
+                              storage.all(instance.__class__).values())
 
     @unittest.skipIf(storage_type == 'db', 'not support by filestorage')
     def test_new(self):
