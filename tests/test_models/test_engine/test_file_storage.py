@@ -72,7 +72,7 @@ test_file_storage.py'])
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
 
-    @unittest.skipIf(storage_type == 'db', 'not support by filestorage')
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_all(self):
         """Test that all returns the FileStorage.__objects attr"""
         storage = FileStorage()
@@ -87,7 +87,7 @@ class TestFileStorage(unittest.TestCase):
                 self.assertIn(instance,
                               storage.all(instance.__class__).values())
 
-    @unittest.skipIf(storage_type == 'db', 'not support by filestorage')
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_new(self):
         """test that new adds an object to the FileStorage.__objects attr"""
         storage = FileStorage()
@@ -103,7 +103,7 @@ class TestFileStorage(unittest.TestCase):
                 self.assertEqual(test_dict, storage._FileStorage__objects)
         FileStorage._FileStorage__objects = save
 
-    @unittest.skipIf(storage_type == 'db', 'not support by filestorage')
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_save(self):
         """Test that save properly saves objects to file.json"""
         os.remove("file.json")
@@ -125,7 +125,7 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
 
-    @unittest.skipIf(storage_type == 'db', 'not support by filestorage')
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_delete(self):
         """test that delete deletes passed object from FileStorage.__objects
         attr"""

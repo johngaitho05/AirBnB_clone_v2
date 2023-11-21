@@ -4,7 +4,7 @@ Contains the TestUserDocs classes
 """
 from datetime import datetime
 import inspect
-from models import user
+from models import user, storage_type
 from models.base_model import BaseModel
 import pep8
 import unittest
@@ -68,24 +68,28 @@ class TestUser(unittest.TestCase):
         self.assertTrue(hasattr(user, "created_at"))
         self.assertTrue(hasattr(user, "updated_at"))
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_email_attr(self):
         """Test that User has attr email, and it's an empty string"""
         user = User()
         self.assertTrue(hasattr(user, "email"))
         self.assertEqual(user.email, "")
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_password_attr(self):
         """Test that User has attr password, and it's an empty string"""
         user = User()
         self.assertTrue(hasattr(user, "password"))
         self.assertEqual(user.password, "")
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_first_name_attr(self):
         """Test that User has attr first_name, and it's an empty string"""
         user = User()
         self.assertTrue(hasattr(user, "first_name"))
         self.assertEqual(user.first_name, "")
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_last_name_attr(self):
         """Test that User has attr last_name, and it's an empty string"""
         user = User()
@@ -97,7 +101,9 @@ class TestUser(unittest.TestCase):
         u = User()
         new_d = u.to_dict()
         self.assertEqual(type(new_d), dict)
-        for attr in u.__dict__:
+        vals = {k: v for k, v in u.__dict__.items()
+                if k != '_sa_instance_state'}
+        for attr in vals:
             self.assertTrue(attr in new_d)
             self.assertTrue("__class__" in new_d)
 

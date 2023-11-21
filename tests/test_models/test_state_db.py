@@ -7,13 +7,14 @@ from models import state, storage_type
 from models.base_model import BaseModel
 from datetime import datetime
 import unittest
+
 State = state.State
 
 
 class TestState_db(unittest.TestCase):
     """Test the State class with db storage"""
 
-    attributes = { 'name': "California" }
+    attributes = {'name': "California"}
 
     row = State(**attributes)
 
@@ -33,7 +34,6 @@ class TestState_db(unittest.TestCase):
         self.assertTrue(type(self.row.updated_at), datetime)
         self.assertEqual(type(self.row), State)
 
-
     def test_isChild(self):
         """Test if instance is child of State"""
         self.assertIsInstance(self.row, State)
@@ -42,5 +42,6 @@ class TestState_db(unittest.TestCase):
         """Test for required attr for table states"""
         self.attributes.update({'id': None, 'cities': None})
         for attr in self.attributes.keys():
-            with self.subTest(attr=attr):
-                self.assertTrue(hasattr(self.row, attr))
+            if attr != '_sa_instance_state':
+                with self.subTest(attr=attr):
+                    self.assertTrue(hasattr(self.row, attr))

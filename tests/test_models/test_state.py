@@ -5,7 +5,7 @@ Contains the TestStateDocs classes
 
 from datetime import datetime
 import inspect
-from models import state
+from models import state, storage_type
 from models.base_model import BaseModel
 import pep8
 import unittest
@@ -66,6 +66,7 @@ class TestState(unittest.TestCase):
         self.assertTrue(hasattr(state, "created_at"))
         self.assertTrue(hasattr(state, "updated_at"))
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_name_attr(self):
         """Test that State has attribute name, and it's as an empty string"""
         state = State()
@@ -77,7 +78,9 @@ class TestState(unittest.TestCase):
         s = State()
         new_d = s.to_dict()
         self.assertEqual(type(new_d), dict)
-        for attr in s.__dict__:
+        vals = {k: v for k, v in s.__dict__.items()
+                if k != '_sa_instance_state'}
+        for attr in vals:
             self.assertTrue(attr in new_d)
             self.assertTrue("__class__" in new_d)
 

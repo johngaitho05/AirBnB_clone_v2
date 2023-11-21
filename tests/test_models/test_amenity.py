@@ -5,7 +5,7 @@ Contains the TestAmenityDocs classes
 
 from datetime import datetime
 import inspect
-from models import amenity
+from models import amenity, storage_type
 from models.base_model import BaseModel
 import pep8
 import unittest
@@ -66,6 +66,7 @@ class TestAmenity(unittest.TestCase):
         self.assertTrue(hasattr(amenity, "created_at"))
         self.assertTrue(hasattr(amenity, "updated_at"))
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_name_attr(self):
         """Test that Amenity has attribute name, and it's as an empty string"""
         amenity = Amenity()
@@ -77,7 +78,9 @@ class TestAmenity(unittest.TestCase):
         am = Amenity()
         new_d = am.to_dict()
         self.assertEqual(type(new_d), dict)
-        for attr in am.__dict__:
+        vals = {k: v for k, v in am.__dict__.items()
+                if k != '_sa_instance_state'}
+        for attr in vals:
             self.assertTrue(attr in new_d)
             self.assertTrue("__class__" in new_d)
 

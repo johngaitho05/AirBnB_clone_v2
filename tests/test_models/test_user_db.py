@@ -46,5 +46,6 @@ class TestUser_db(unittest.TestCase):
         """Test for required attr for table users"""
         self.attributes.update({'id': None, 'reviews': None, 'places': None})
         for attr in self.attributes.keys():
-            with self.subTest(attr=attr):
-                self.assertTrue(hasattr(self.row, attr))
+            if attr != '_sa_instance_state':
+                with self.subTest(attr=attr):
+                    self.assertTrue(hasattr(self.row, attr))

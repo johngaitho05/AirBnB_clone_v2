@@ -66,30 +66,35 @@ class TestPlace(unittest.TestCase):
         self.assertTrue(hasattr(place, "created_at"))
         self.assertTrue(hasattr(place, "updated_at"))
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_city_id_attr(self):
         """Test Place has attr city_id, and it's an empty string"""
         place = Place()
         self.assertTrue(hasattr(place, "city_id"))
         self.assertEqual(place.city_id, "")
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_user_id_attr(self):
         """Test Place has attr user_id, and it's an empty string"""
         place = Place()
         self.assertTrue(hasattr(place, "user_id"))
         self.assertEqual(place.user_id, "")
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_name_attr(self):
         """Test Place has attr name, and it's an empty string"""
         place = Place()
         self.assertTrue(hasattr(place, "name"))
         self.assertEqual(place.name, "")
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_description_attr(self):
         """Test Place has attr description, and it's an empty string"""
         place = Place()
         self.assertTrue(hasattr(place, "description"))
         self.assertEqual(place.description, "")
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_number_rooms_attr(self):
         """Test Place has attr number_rooms, and it's an int == 0"""
         place = Place()
@@ -97,6 +102,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(type(place.number_rooms), int)
         self.assertEqual(place.number_rooms, 0)
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_number_bathrooms_attr(self):
         """Test Place has attr number_bathrooms, and it's an int == 0"""
         place = Place()
@@ -104,6 +110,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(type(place.number_bathrooms), int)
         self.assertEqual(place.number_bathrooms, 0)
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_max_guest_attr(self):
         """Test Place has attr max_guest, and it's an int == 0"""
         place = Place()
@@ -111,6 +118,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(type(place.max_guest), int)
         self.assertEqual(place.max_guest, 0)
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_price_by_night_attr(self):
         """Test Place has attr price_by_night, and it's an int == 0"""
         place = Place()
@@ -118,6 +126,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(type(place.price_by_night), int)
         self.assertEqual(place.price_by_night, 0)
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_latitude_attr(self):
         """Test Place has attr latitude, and it's a float == 0.0"""
         place = Place()
@@ -125,13 +134,15 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(type(place.latitude), float)
         self.assertEqual(place.latitude, 0.0)
 
-    def test_latitude_attr(self):
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
+    def test_longitude_attr(self):
         """Test Place has attr longitude, and it's a float == 0.0"""
         place = Place()
         self.assertTrue(hasattr(place, "longitude"))
         self.assertEqual(type(place.longitude), float)
         self.assertEqual(place.longitude, 0.0)
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_amenity_ids_attr(self):
         """Test Place has attr amenity_ids, and it's an empty list"""
         place = Place()
@@ -144,7 +155,9 @@ class TestPlace(unittest.TestCase):
         p = Place()
         new_d = p.to_dict()
         self.assertEqual(type(new_d), dict)
-        for attr in p.__dict__:
+        vals = {k: v for k, v in p.__dict__.items()
+                if k != '_sa_instance_state'}
+        for attr in vals:
             self.assertTrue(attr in new_d)
             self.assertTrue("__class__" in new_d)
 

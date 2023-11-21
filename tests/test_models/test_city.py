@@ -5,7 +5,7 @@ Contains the TestCityDocs classes
 
 from datetime import datetime
 import inspect
-from models import city
+from models import city, storage_type
 from models.base_model import BaseModel
 import pep8
 import unittest
@@ -66,12 +66,14 @@ class TestCity(unittest.TestCase):
         self.assertTrue(hasattr(city, "created_at"))
         self.assertTrue(hasattr(city, "updated_at"))
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_name_attr(self):
         """Test that City has attribute name, and it's an empty string"""
         city = City()
         self.assertTrue(hasattr(city, "name"))
         self.assertEqual(city.name, "")
 
+    @unittest.skipIf(storage_type == 'db', 'not support by dbstorage')
     def test_state_id_attr(self):
         """Test that City has attribute state_id, and it's an empty string"""
         city = City()
@@ -83,7 +85,9 @@ class TestCity(unittest.TestCase):
         c = City()
         new_d = c.to_dict()
         self.assertEqual(type(new_d), dict)
-        for attr in c.__dict__:
+        vals = {k: v for k, v in c.__dict__.items()
+                if k != '_sa_instance_state'}
+        for attr in vals:
             self.assertTrue(attr in new_d)
             self.assertTrue("__class__" in new_d)
 
