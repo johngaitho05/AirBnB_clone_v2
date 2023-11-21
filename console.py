@@ -184,9 +184,9 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.__classes[klas](**kwargs)
         try:
             new_instance.save()
+            print(new_instance.id)
         except IntegrityError:
             pass
-        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """

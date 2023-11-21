@@ -2,6 +2,8 @@
 """
 This is an abstraction class to be inherited by other classes of the project
 """
+import hashlib
+
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.exc import IntegrityError
 from . import storage, storage_type
@@ -33,6 +35,10 @@ class BaseModel:
                 kwargs['created_at'] = now
             if 'updated_at' not in kwargs:
                 kwargs['updated_at'] = now
+            if 'password' in kwargs:
+                pwd = kwargs['password']
+                kwargs['password'] = (hashlib.md5(pwd.encode('utf-8'))
+                                      .hexdigest().lower())
             for k, v in kwargs.items():
                 if k in forbidden_keys:
                     continue
