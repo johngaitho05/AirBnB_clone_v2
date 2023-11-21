@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 """Defines the Place class."""
 from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
 from models.engine.db_storage import Base
-from . import storage_type
+from . import storage_type, storage
+from .review import Review
 
 if storage_type == 'db':
     class Place(BaseModel, Base):
@@ -22,6 +24,8 @@ if storage_type == 'db':
         price_by_night = Column(Integer, default=0, nullable=False)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
+        reviews = relationship("Review", backref="place",
+                               cascade="all, delete-orphan")
 
 else:
     class Place(BaseModel):
@@ -53,5 +57,7 @@ else:
         longitude = 0.0
         amenity_ids = []
 
-
-
+        @property
+        def reviews(self):
+            all_reviews = list(storage.all(Review).values())
+            return list(filter((lambda c: c.place_id == self.id), all_reviews))

@@ -246,7 +246,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """prints all instances of a given model"""
-        arg = self._split_dict(arg)
+        arg = self._split(arg)
         if not arg:
             return print([str(instance) for k, instance in
                           storage.all().items()])
