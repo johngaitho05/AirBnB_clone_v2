@@ -3,12 +3,12 @@
 This is an abstraction class to be inherited by other classes of the project
 """
 import hashlib
-
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.exc import IntegrityError
-from . import storage, storage_type
 import uuid
 from datetime import datetime
+
+from sqlalchemy import Column, String, DateTime
+
+from . import storage, storage_type
 
 
 class BaseModel:

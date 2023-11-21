@@ -19,7 +19,6 @@ if storage_type == 'db':
                                  nullable=False)
                           )
 
-
     class Place(BaseModel, Base):
         """
         Place ORM

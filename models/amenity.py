@@ -2,10 +2,8 @@
 """
 Defines the Amenity class.
 """
-from models.base_model import BaseModel
 
-from sqlalchemy import Column, String, ForeignKey, Table
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String
 
 from models.base_model import BaseModel
 from models.engine.db_storage import Base
