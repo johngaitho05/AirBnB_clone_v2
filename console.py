@@ -3,6 +3,9 @@
 import cmd
 import re
 import sys
+
+from sqlalchemy.exc import IntegrityError
+
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -179,7 +182,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.__classes[klas](**kwargs)
-        new_instance.save()
+        try:
+            new_instance.save()
+        except IntegrityError:
+            pass
         print(new_instance.id)
 
     def help_create(self):
