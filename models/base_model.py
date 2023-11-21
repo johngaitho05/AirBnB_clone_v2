@@ -3,7 +3,7 @@
 This is an abstraction class to be inherited by other classes of the project
 """
 from sqlalchemy import Column, Integer, String, DateTime
-
+from sqlalchemy.exc import IntegrityError
 from . import storage, storage_type
 import uuid
 from datetime import datetime
@@ -58,6 +58,7 @@ class BaseModel:
         self.updated_at = datetime.now()
         storage.new(self)
         storage.save()
+
 
     def to_dict(self):
         """Returns a dictionary representation of an object"""

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
+import re
 import sys
 from models.base_model import BaseModel
 from models.__init__ import storage
@@ -113,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def _split(self, args):
+    def _split_dict(self, args):
         """Splits args in to className and kwargs"""
         def parse_value(value):
             if value.startswith('"') and value.endswith('"'):
@@ -155,18 +156,31 @@ class HBNBCommand(cmd.Cmd):
 
         return class_name, params
 
+    def _split(self, arg):
+        """Split the line in to substrings based on double quotes and spaces"""
+        pattern = r'("[^"]+"|\{[^}]*\}|\S+)'
+        res = re.findall(pattern, arg)
+        for i in range(len(res)):
+            try:
+                v = eval(res[i])
+                if type(v) in (int, str, float, dict):
+                    res[i] = v
+            except (NameError, SyntaxError, TypeError):
+                continue
+        return res
+
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
             print("** class name missing **")
             return
-        klas, kwargs = self._split(args)
+        klas, kwargs = self._split_dict(args)
         if klas not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.__classes[klas](**kwargs)
-        print(new_instance.id)
         new_instance.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
@@ -206,33 +220,21 @@ class HBNBCommand(cmd.Cmd):
         print("Shows an individual instance of a class")
         print("[Usage]: show <className> <objectId>\n")
 
-    def do_destroy(self, args):
-        """ Destroys a specified object """
-        new = args.partition(" ")
-        c_name = new[0]
-        c_id = new[2]
-        if c_id and ' ' in c_id:
-            c_id = c_id.partition(' ')[0]
-
-        if not c_name:
-            print("** class name missing **")
-            return
-
-        if c_name not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
-            return
-
-        if not c_id:
-            print("** instance id missing **")
-            return
-
-        key = c_name + "." + c_id
-
-        try:
-            del (storage.all()[key])
-            storage.save()
-        except KeyError:
-            print("** no instance found **")
+    def do_destroy(self, arg):
+        """deletes an instance given a classname and instance id"""
+        arg = self._split(arg)
+        if not arg:
+            return print("** class name missing **")
+        if arg[0] not in self.__classes:
+            return print("** class doesn't exist **")
+        if len(arg) < 2:
+            return print("** instance id missing **")
+        key = "{}.{}".format(arg[0], arg[1])
+        instance = storage.all().get(key)
+        if not instance:
+            return print("** no instance found **")
+        storage.delete(instance)
+        storage.save()
 
     def help_destroy(self):
         """ Help information for the destroy command """
@@ -241,7 +243,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """prints all instances of a given model"""
-        arg = self._split(arg)
+        arg = self._split_dict(arg)
         if not arg:
             return print([str(instance) for k, instance in
                           storage.all().items()])
@@ -259,7 +261,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_count(self, arg):
         """Count instances based on className"""
-        args = self._split(arg)
+        args = self._split_dict(arg)
         klas = args[0]
         match = list(filter(lambda k: k.startswith('{}.'.format(klas)),
                             storage.all().keys()))
