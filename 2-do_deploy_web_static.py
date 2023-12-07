@@ -12,7 +12,6 @@ def do_deploy(archive_path):
 
     # Check if the archive exists
     if not os.path.exists(archive_path):
-        print(f"Error: Archive {archive_path} not found.")
         return False
 
     # Upload the archive to the /tmp/ directory of the web server
