@@ -33,6 +33,7 @@ def do_pack():
     print(f"{LOCAL_PATH} packed: {archive_path} -> {archive_size} Bytes")
 
     print("\nDone.")
+    return archive_path
 
 
 if __name__ == "__main__":
