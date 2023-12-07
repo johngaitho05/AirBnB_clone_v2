@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# This script deploys the web static content
+"""This script deploys the static files to 2 remote servers"""
 import os
 
 from fabric.api import env, put, run, sudo
