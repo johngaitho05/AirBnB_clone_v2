@@ -24,7 +24,7 @@ def do_deploy(archive_path):
         archive_filename_without_extension = (
             os.path.splitext(archive_filename))[0]
         remote_path = (f"/data/web_static/releases/"
-                       f"{archive_filename_without_extension}")
+                       f"{archive_filename_without_extension}/")
 
         run(f'mkdir -p {remote_path}')
         run(f'tar -xzf /tmp/{archive_filename} -C {remote_path} '
@@ -32,14 +32,15 @@ def do_deploy(archive_path):
 
         # Delete the archive from the web server
         run(f'rm /tmp/{archive_filename}')
+        run(f'rm -rf /data/web_static/releases/{archive_filename_without_extension}/web_static')
 
         # Delete the symbolic link /data/web_static/current
         run('rm -f /data/web_static/current')
 
         # Create a new symbolic link to the new version
-        sudo(f'ln -s {remote_path} /data/web_static/current')
+        run(f'ln -s {remote_path} /data/web_static/current')
 
-        print("New version deployed successfully.")
+        print("New version deployed!")
         return True
     except Exception as e:
         return False
