@@ -27,16 +27,15 @@ def do_deploy(archive_path):
                        f"{archive_filename_without_extension}/")
 
         run(f'mkdir -p {remote_path}')
-        run(f'tar -xzf /tmp/{archive_filename} -C {remote_path} '
-            f'--strip-components=1')
+        run(f'tar -xzf /tmp/{archive_filename} -C {remote_path}')
 
         # Delete the archive from the web server
         run(f'rm /tmp/{archive_filename}')
-        run(f'rm -rf /data/web_static/releases/'
-            f'{archive_filename_without_extension}/web_static')
+        run(f'mv {remote_path}web_static/* {remote_path}')
+        run(f'rm -rf {remote_path}web_static')
 
         # Delete the symbolic link /data/web_static/current
-        run('rm -f /data/web_static/current')
+        run('rm -rf /data/web_static/current')
 
         # Create a new symbolic link to the new version
         run(f'ln -s {remote_path} /data/web_static/current')
