@@ -12,7 +12,7 @@ sudo mkdir -p /data/web_static/{releases/test,shared}
 sudo chmod 755 /data/web_static/releases
 
 # Create a fake HTML file for testing
-echo "<html><head></head><body>Test Page</body></html>" | sudo tee /data/web_static/releases/test/index.html
+echo "<html><head></head><body>Test Page</body></html>" > tee /data/web_static/releases/test/index.html
 
 # Create or recreate symbolic link
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
