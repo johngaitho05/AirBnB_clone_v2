@@ -1,46 +1,39 @@
 #!/usr/bin/python3
-"""This script deploys the static files to 2 remote servers"""
-import os
-
+"""This script (based on the file 1-pack_web_static.py) that
+distributes an archive to your web servers, using the function do_deploy"""
 from fabric.api import env, put, run
-
+from os.path import exists
+import shlex
 env.hosts = ['52.23.178.146', '100.26.223.57']
+env.user = 'ubuntu'
 
 
 def do_deploy(archive_path):
-    """Distributes an archive to the web servers."""
-
+    """All remote commands must be executed on your both web servers
+    (using env.hosts = ['<IP web-01>', 'IP web-02'] variable in your script)"""
+    if not exists(archive_path):
+        return False
     try:
-        # Check if the archive exists
-        if not os.path.exists(archive_path):
-            return False
+        pname = archive_path.replace('/', ' ')
+        pname = shlex.split(pname)
+        pname = pname[-1]
 
-        # Upload the archive to the /tmp/ directory of the web server
+        wname = pname.replace('.', ' ')
+        wname = shlex.split(wname)
+        wname = wname[0]
+
+        releases_path = "/data/web_static/releases/{}/".format(wname)
+        tmp_path = "/tmp/{}".format(pname)
+
         put(archive_path, "/tmp/")
-
-        # Extract the archive to /data/web_static/
-        # releases/<archive_filename_without_extension>
-        archive_filename = os.path.basename(archive_path)
-        archive_filename_without_extension = (
-            os.path.splitext(archive_filename))[0]
-        remote_path = (f"/data/web_static/releases/"
-                       f"{archive_filename_without_extension}/")
-
-        run(f'mkdir -p {remote_path}')
-        run(f'tar -xzf /tmp/{archive_filename} -C {remote_path}')
-
-        # Delete the archive from the web server
-        run(f'rm /tmp/{archive_filename}')
-        run(f'mv {remote_path}web_static/* {remote_path}')
-        run(f'rm -rf {remote_path}web_static')
-
-        # Delete the symbolic link /data/web_static/current
-        run('rm -rf /data/web_static/current')
-
-        # Create a new symbolic link to the new version
-        run(f'ln -s {remote_path} /data/web_static/current')
-
+        run("mkdir -p {}".format(releases_path))
+        run("tar -xzf {} -C {}".format(tmp_path, releases_path))
+        run("rm {}".format(tmp_path))
+        run("mv {}web_static/* {}".format(releases_path, releases_path))
+        run("rm -rf {}web_static".format(releases_path))
+        run("rm -rf /data/web_static/current")
+        run("ln -s {} /data/web_static/current".format(releases_path))
         print("New version deployed!")
         return True
-    except Exception as e:
+    except BaseException:
         return False
