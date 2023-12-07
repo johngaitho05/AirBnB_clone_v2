@@ -2,7 +2,7 @@
 """This script deploys the static files to 2 remote servers"""
 import os
 
-from fabric.api import env, put, run, sudo
+from fabric.api import env, put, run
 
 env.hosts = ['52.23.178.146', '100.26.223.57']
 
