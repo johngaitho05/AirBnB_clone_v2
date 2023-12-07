@@ -12,7 +12,7 @@ def copy_script():
     username = 'ubuntu'
 
     # Remote server
-    hosts = ['52.23.178.146', '52.23.178.146']
+    hosts = ['52.23.178.146', '100.26.223.57']
 
     for host in hosts:
         # Connect to the remote server
