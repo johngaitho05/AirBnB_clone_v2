@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""A simple flask server with a dynamic route"""
+"""A simple flask server with a multi routes view"""
 from flask import Flask
 
 app = Flask(__name__)
