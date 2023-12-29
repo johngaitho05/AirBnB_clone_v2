@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""A simple flask server with a route that accepts an int variable"""
+"""A simple flask server that displays if a number is odd or even"""
 from flask import Flask, render_template
 
 app = Flask(__name__)
