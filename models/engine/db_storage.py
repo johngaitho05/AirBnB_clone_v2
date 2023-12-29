@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """Defines the DBStorage class."""
-import json
 import os
 
 from sqlalchemy import create_engine
@@ -57,14 +56,11 @@ class DBStorage:
             self.__session.delete(obj)
 
     def reload(self):
-        from models.user import User
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.place import Place
-        from models.review import Review
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        self.__session.close()
