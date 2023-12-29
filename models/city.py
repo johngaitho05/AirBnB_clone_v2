@@ -5,9 +5,8 @@ Defines the City class.
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
-from models.base_model import BaseModel
-from models.engine.db_storage import Base
-from . import storage_type
+from models.base_model import Base, BaseModel
+from models import storage_type
 
 
 if storage_type == 'db':

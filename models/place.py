@@ -3,9 +3,8 @@
 from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 
-from models.base_model import BaseModel
-from models.engine.db_storage import Base
-from . import storage_type, storage
+from models.base_model import Base, BaseModel
+from models import storage_type
 from .amenity import Amenity
 from .review import Review
 
@@ -71,11 +70,13 @@ else:
 
         @property
         def reviews(self):
+            from models import storage
             all_reviews = list(storage.all(Review).values())
             return list(filter((lambda c: c.place_id == self.id), all_reviews))
 
         @property
         def amenities(self):
+            from models import storage
             all_amenities = list(storage.all(Amenity).values())
             return list(filter((lambda a: a.id in self.amenity_ids),
                                all_amenities))

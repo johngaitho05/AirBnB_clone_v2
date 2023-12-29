@@ -2,13 +2,15 @@
 """
 This is an abstraction class to be inherited by other classes of the project
 """
-import hashlib
 import uuid
 from datetime import datetime
 
 from sqlalchemy import Column, String, DateTime
+from sqlalchemy.orm import declarative_base
 
-from . import storage, storage_type
+from models import storage_type
+
+Base = declarative_base()
 
 
 class BaseModel:
@@ -65,6 +67,7 @@ class BaseModel:
     def save(self):
         """updates the public instance attribute updated_
         at with the current datetime"""
+        from models import storage
         self.updated_at = datetime.now()
         storage.new(self)
         storage.save()
@@ -81,4 +84,5 @@ class BaseModel:
 
     def delete(self):
         """Deletes an instance from storage"""
+        from models import storage
         storage.delete(self)

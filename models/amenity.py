@@ -5,8 +5,7 @@ Defines the Amenity class.
 
 from sqlalchemy import Column, String
 
-from models.base_model import BaseModel
-from models.engine.db_storage import Base
+from models.base_model import Base, BaseModel
 from . import storage_type
 
 if storage_type == 'db':
