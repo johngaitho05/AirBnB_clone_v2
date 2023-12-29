@@ -15,7 +15,6 @@ def teardown(request):
 @app.route('/states_list')
 def states_view():
     states = storage.all(State)
-    print("states", [v.name for k, v in states.items()])
     return render_template('7-states_list.html', states=states)
 
 
