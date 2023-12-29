@@ -16,6 +16,7 @@ class DBStorage:
     __session = None
 
     def __init__(self):
+        """Initializer"""
         username = os.getenv('HBNB_MYSQL_USER')
         password = os.getenv('HBNB_MYSQL_PWD')
         host = os.getenv('HBNB_MYSQL_HOST', 'localhost')
@@ -29,6 +30,7 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
+        """Return all records of the given class"""
         from models.user import User
         from models.state import State
         from models.city import City
@@ -46,16 +48,20 @@ class DBStorage:
                 for obj in res}
 
     def new(self, obj):
+        """Create a new record"""
         self.__session.add(obj)
 
     def save(self):
+        """save a record"""
         self.__session.commit()
 
     def delete(self, obj=None):
+        """Deletes a record from session"""
         if obj:
             self.__session.delete(obj)
 
     def reload(self):
+        """Reloads the data"""
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)
