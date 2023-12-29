@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""A simple flask server that uses SQLAlchemy"""
+"""A simple flask server that uses SQLAlchemy to display states"""
 from flask import Flask, render_template
 from models import storage
 from models.state import State
