@@ -16,7 +16,8 @@ def teardown_db(exception):
 @app.route('/states', strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def states_view(id=None):
-    """Renders a list of cities grouped by states"""
+    """Renders a list of states as well as a list of
+    cities for a given state"""
     if not id:
         states = storage.all(State)
         return render_template('9-states.html',
