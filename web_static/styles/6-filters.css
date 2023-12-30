@@ -5,6 +5,8 @@
 	width: 100%;
 	border: 1px solid #DDDDDD;
 	border-radius: 4px;
+	position: relative;
+	z-index: 1000;
 }
 
 .locations {
@@ -50,8 +52,7 @@
 
 ul {
 	list-style-type: none;
-	padding: 0px;
-	padding-bottom: 20px;
+	padding: 0px 0px 20px;
 }
 
 li {
