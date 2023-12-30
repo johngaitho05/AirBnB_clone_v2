@@ -11,6 +11,8 @@
 
 ### How to Run
 ```
+pip3 install -r requirements.txt
+
 curl -o 100-dump.sql "https://s3.amazonaws.com/intranet-projects-files/holbertonschool-higher-level_programming+/290/100-hbnb.sql"
 
 cat 100-dump.sql | mysql -uroot -p
