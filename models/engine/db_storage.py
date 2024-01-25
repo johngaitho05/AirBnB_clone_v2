@@ -20,7 +20,7 @@ classes = {"User": User, "State": State, "City": City,
 
 
 class DBStorage:
-    '''database storage engine for mysql storage'''
+    """database storage engine for mysql storage"""
     __engine = None
     __session = None
 
@@ -74,8 +74,8 @@ class DBStorage:
         self.__session.commit()
 
     def delete(self, obj=None):
-        """ deletes from the current databse session the obj
-            is it's not None
+        """ deletes from the current database session the obj
+            if it's not None
         """
         if obj is not None:
             self.__session.query(type(obj)).filter(
